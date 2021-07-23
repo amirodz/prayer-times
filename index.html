@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="apple-touch-icon" type="image/png" href="img/masjid.ico" />
+<meta name="apple-mobile-web-app-title" content="prayer time">
+<link rel="shortcut icon" type="image/x-icon" href="img/masjid.ico" />
+<title>Moslem salat times | مواقيت الصلاة لكل دول العالم</title>
+<link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">	
+<link rel='stylesheet' href='css/bootstrap-rtl.min.css'>
+<link rel="stylesheet" href="css/bootstrap-side-modals.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="js/toastr.min.css">
+<style>
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.header {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.footer {
+  padding: 2.5rem 0;
+  color: #999;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-top: .05rem solid #e5e5e5;
+}
+.footer p:last-child {
+  margin-bottom: 0;
+}
+#weather {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: rgb(233, 238, 239);
+  background: radial-gradient(
+    circle,
+    rgba(223, 255, 239, 0.6334908963585435) 0%,
+    rgba(223, 223, 255, 0.8407738095238095) 35%,
+    rgba(233, 238, 239, 1) 100% );
+  }  
+</style>
+</head>
+<body>
+<div class="container">	
+<div class="row">
+<div class="col-md-12">
+ <div class="row">
+<div class="col-md-8">
+<p class="lead">
+ <img alt="Brand" src="img/100png.png">
+ <h1 class="bg-white pr-3 pt-3 pb-3 font-weight-bolder text-dark border rounded">مواقيت الصلاة كل دول العالم </h1>
+</p>
+
+<div class="lead bg-white pr-3 pt-3 pb-3 font-weight-bolder text-primary border rounded mb-5 social">
+    <ul>
+        <li class="facebook"><i class="fa fa-lg fa-facebook"></i></li>
+        <li class="twitter"><i class="fa fa-lg fa-twitter"></i></li>
+        <li class="gplus"><i class="fa fa-lg fa-google-plus"></i></li>
+        <li class="github"><i class="fa fa-lg fa-github"></i></li>
+        <li class="digg"><i class="fa fa-lg fa-digg"></i></li>
+        <li class="delicious"><i class="fa fa-lg fa-delicious"></i></li>
+        <li class="email"><i class="fa fa-lg fa-envelope"></i></li>
+   
+    </ul>
+</div>
+
+<div class="alert alert-danger alert-dismissible fade show" id="status" role="alert" style="display:none;">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
+
+</div>
+
+<p class="lead bg-white pr-3 pt-3 pb-3 font-weight-bolder text-primary border rounded">
+<i class="fa fa-calendar"></i>&nbsp;&nbsp;<i id="hijridate"></i>
+
+</p>
+
+<p class="lead bg-white pr-3 pt-3 pb-3 font-weight-bolder text-primary border rounded">
+<i class="fa fa-calendar"></i>&nbsp;&nbsp;<i id="datemoment"></i>
+</p>
+
+<p class="lead bg-white pr-3 pt-3 pb-3 font-weight-bolder text-success border rounded">
+</i>&nbsp;&nbsp;<i id="methodname"></i>
+</i>&nbsp;&nbsp;<i id="jurisdictionname"></i>
+</p>
+
+ <div class="card bg-light shadow-sm mb-5">
+
+<div class="card-header bg-white font-weight-bolder text-success border-top"><span id="nextprayer"></span>
+	 <span id="hours"></span>
+  <span id="minutes"></span>
+  <span id="seconds"></span>
+  </div>  
+  <div class="card-body">
+
+	 
+	<div id="prayertimes"></div>
+	
+		
+	
+
+</div>
+</div>
+
+<div class="card bg-light">
+<div class="card-body">
+
+<div id="showprayertimes" class="text-center" style="display:none;">
+ <h2><i class="fa fa-bullhorn"></i>  وقت صلاة <span id="prayernow"></span></h2>
+<div id="length">مدة الأذان:</div>
+<!-- <div id="source">الرابط:</div> -->
+<div id="status" style="color:red;">الحالة : يتم تحميل الأذان</div>
+<hr>
+<h2>أزرار التحكم</h2>
+<button class="btn btn-success" id="play"> تشغيل </button>
+<button class="btn btn-primary" id="restart"> إعادة </button>
+<button class="btn btn-danger" id="pause"> إيقاف </button>
+<hr>
+<h2>معلومات</h2>
+<div id="currentTime">0</div>
+<progress id="seekbar" value="0" max="1"></progress>  	  
+</div>
+
+<div class="btn btn-lg btn-block btn-outline-danger" id="countdown-timer"></div>	
+ 
+<div class="message"></div>
+  
+<div class="text-center mt-5" id="tonexttimes"></div>
+
+ 
+
+</div>
+</div>
+
+
+
+
+	
+</div>
+<div class="col-md-4">
+
+<div class="card bg-light mt-5">
+  <div class="card-header"><strong><i class="fa fa-cog"></i> اعدادت مواقيت الصلاه</strong>    </div>
+  <div class="card-body">
+	  
+<form class="form" action="javascript:updateprayer(this);" role="form">
+<div class="form-group">
+<label>خط العرض: </label>
+<input type="text" class="form-control form-control-lg" value="" id="latitude" size="2" />&nbsp;	
+</div>
+<div class="form-group">
+<label>خط الطول: </label>
+<input type="text" class="form-control form-control-lg" value="" id="longitude" size="2" />&nbsp;	
+</div>
+<div class="form-group">
+<label>فرق الزمن: </label>	 
+<select size="1" class="form-control form-control-lg" style="font-size: 12px;" name="timezone" id="timezone" >
+<option value="auto" selected="selected">Auto</option>
+<option value="0">0 </option>
+<option value="1">+1 </option>
+<option value="-1">-1 </option>
+<option value="2">+2 </option>
+<option value="-2">-2 </option>
+<option value="3">+3 </option>
+<option value="-3">-3 </option>
+<option value="4">+4 </option>
+<option value="-4">-4 </option>
+<option value="5">+5 </option>
+<option value="-5">-5 </option>
+<option value="6">+6 </option>
+<option value="-6">-6 </option>
+<option value="7">+7 </option>
+<option value="-7">-7 </option>
+<option value="8">+8 </option>
+<option value="-8">-8 </option>
+<option value="9">+9 </option>
+<option value="-9">-9 </option>
+<option value="10">+10 </option>
+<option value="-10">-10 </option>
+<option value="11">+11 </option>
+<option value="-11">-11 </option>
+<option value="12">+12 </option>
+<option value="-12">-12 </option>
+</select>
+&nbsp;</div>
+<div class="form-group">
+<label>التوقيت الصيفي : </label>
+	<select id="dst" size="1" class="form-control form-control-lg" style="font-size: 12px;">
+		<option value="auto" selected="selected">Auto</option>
+		<option value="0">0</option>
+		<option value="1">+1</option>
+    </select>&nbsp;
+	</div>	
+	<div class="form-group">
+
+	 <label>طريقة الحساب: </label>
+	<select id="method" size="1" class="form-control form-control-lg" style="font-size: 12px;">
+	<option value="DZM">وزارة الشؤون الدينية والأوقاف الجزائرية</option>
+	<option value="MWL">رابطة العالم الإسلامي(MWL)</option>
+	<option value="ISNA">الجمعية الإسلامية لأمريكا الشمالية (ISNA)</option>
+	<option value="Egypt">الهيئة العامة المصرية للمساحة</option>
+	<option value="Makkah">مكه - ام القرى</option>
+	<option value="Karachi">كراتشي - جامعة العلوم الإسلامية</option>
+	<option value="Jafari">الجعفري - الاثنى عشريه</option>
+	<option value="Tehran">جامعة طهران - معهد الجيوفيزياء</option>
+	<option value="BH">الخليج 90 دقيقه العشاء ثابت</option>
+	<option value="TR">الشؤون الدينية التركية</option>
+	<option value="RU">روسيا مخصص</option>
+	<option value="FR">اتحاد المنظمات الإسلامية في فرنسا</option>
+	<option value="DE">ألمانيا مخصص</option>
+	<option value="ID">نظام المعلومات الاندونيسيا</option>
+	<option value="Qatar">قطر</option>
+	<option value="KUWAIT">الكويت</option>
+   
+    </select>	
+	</div>
+
+<div class="form-group">
+<label>المذهب</label>
+<select size="1" style="font-size: 12px;" id="jurisdiction" name="jurisdiction" class="form-control form-control-lg">
+<option value="Standard" selected="selected">شافعي، حنبلي، مالكي</option>
+<option value="Hanafi">حنفي</option>
+</select>
+</div>
+	   
+<button type="submit" class="btn btn-lg btn-block btn-outline-primary">حفظ الإعدادات</button>
+   
+</form>
+	 
+</div>
+</div>
+
+ <div class="card bg-light mt-5">
+  <div class="card-body">
+<span id="qrcode"></span>
+
+</div>
+</div>
+
+</div>
+</div>
+</div>
+	
+</div>
+</div>
+</div>
+
+<div class="container">	
+<div class="row">
+<div class="col-md-8">
+<div class="pr-5 pl-5 pt-5 pb-5 mt-5">
+
+<table class="table table-light table-hover table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col"> حالة الطقس </th>
+      <th scope="col"><img src="" alt="" id="iconUrl"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">نسبة الرطوبة : </th>
+      <td class="font-weight-bold"><span id="humidity"></span> % </td>
+    </tr>
+    <tr>
+      <th scope="row">الضغط الجوي:</th>
+      <td class="font-weight-bold"><span id="pressure"></span> hpa</td>
+    </tr>
+	  <tr>
+      <th scope="row">حالة السماء:</th>
+      <td class="font-weight-bold"><span id="desc"></span></td>
+    </tr>
+	    <tr>
+      <th scope="row"></th>
+      <td><img src="" alt="" id="Cle"></td>
+    </tr>
+	    <tr>
+      <th scope="row">سرعة الرياح:</th>
+      <td class="font-weight-bold"><span id="windspeed"></span> متر في الثانية</td>
+    </tr>
+	    <tr>
+      <th scope="row">المدينة:</th>
+      <td class="font-weight-bold"><span id="location"></span></td>
+    </tr>
+   <tr>
+      <th scope="row">درجة الحرارة مئوية:</th>
+      <td class="font-weight-bold"><span id="c"></span></td>
+    </tr>
+	    <tr>
+      <th scope="row">درجة الحرارة فهرنهايت:</th>
+      <td class="font-weight-bold"><span id="f"></span></td>
+    </tr>    <tr>
+      <th scope="row">شروق الشمس:</th>
+      <td class="font-weight-bold"><span id="sunrise"></span></td>
+    </tr>    <tr>
+      <th scope="row">غروب الشمس:</th>
+      <td class="font-weight-bold"><span id="sunset"></span></td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id='container'>
+<h2></h2>
+<img />
+<div id='temp'>
+<h1 id='num'></h1>
+<span></span>
+</div>
+<p id='desc'></p>
+</div>
+		
+		
+<footer class="footer mt-5">
+<p class="bg-white font-weight-bolder text-success border-top">
+&copy; Developed with <span class="font-weight-bolder text-danger">&hearts;</span> by <a href="https://github.com/amirodz" target="_blank">&hearts; amir  dz </a>
+<a class="text-success" href="https://github.com/amirodz" target="_blank">Get Source Code</a>
+
+</p>
+ 
+</footer>
+
+<script src="js/jquery-3.1.0.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+<script type="application/javascript" src="js/sharerbox.js" async></script>
+<script>
+window.onload = function(){
+// Buttons list: 'site1, site2, site3'
+// Buttons size: number
+sharerboxIcons('facebook, twitter, whatsapp, reddit,linkedin',45);
+// Setup arguments: Behavior, Position, Color, Visibility, Description
+sharerSetup('pop-up', 'left', 'black', '', 'مواقيت الصلاة');
+//sharerSetup('tab', 'right', 'black', 'visible', 'مواقيت الصلاة');
+};
+var hijridate = new Intl.DateTimeFormat('ar-TN-u-ca-islamic', {day: 'numeric', month: 'long',weekday: 'long',year : 'numeric'}).format(Date.now());
+var hijridate_WesternArabic = hijridate
+	.replace(/٠/gi, "0")
+	.replace(/١/gi, "1")
+	.replace(/٢/gi, "2")
+	.replace(/٣/gi, "3")
+	.replace(/٤/gi, "4")
+	.replace(/٥/gi, "5")
+	.replace(/٦/gi, "6")
+	.replace(/٧/gi, "7")
+	.replace(/٨/gi, "8")
+	.replace(/٩/gi, "9");
+
+
+document.getElementById("hijridate").innerHTML = hijridate_WesternArabic;
+
+</script>
+<script src="js/toastr.min.js"></script>
+<script src="qrcode/qrcode.js"></script>
+<script type="text/javascript">
+var qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: "http://fb.me/free7pro",
+	width: 128,
+	height: 128,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+</script>
+<script type="text/javascript" src="js/datediff.min.js"></script>
+<script type="text/javascript" src="js/praytimes.js"></script>
+<script type="text/javascript" src="script.js"></script>
+<script type="text/javascript">
+function datemoment() {
+var d = new Date();
+var nameOfMonth = [
+      'جانفي',
+      'فيفري',
+      'مارس',
+      'أفريل',
+      'ماي',
+      'جوان',
+      'جويلية',
+      'اوت',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر'
+    ];
+//Sun Mon Tue Wed Thu Fri Sat
+var nameOfweekday = [
+      'الأحد',
+      'الإثنين',
+      'الثلاثاء',
+      'الأربعاء',
+      'الخميس',
+      'الجمعة',
+      'السبت'
+    ];	
+
+var date = d.getDate();// 1-31
+var day = d.getDay();// 0-6
+var month = d.getMonth(); // 0-11 but change to 1-12
+var year = d.getFullYear();// 2020, 2021, so on
+var monthName = nameOfMonth[month]; // 3 char of month name
+var todaysName = nameOfweekday[day]; // 3 char of todays day of the week
+var h = addZero(d.getHours());
+var m = addZero(d.getMinutes());
+var s = addZero(d.getSeconds());
+var timenow = ''+todaysName+' '+date+' '+monthName+' '+year+' الساعة '+h+':'+m+':'+s+'';
+document.getElementById("datemoment").innerHTML = timenow;
+return timenow;
+}
+var Timer = setInterval(datemoment, 500);
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+var pageTitle	= document.title; //HTML page title
+var pageUrl		= location.href; //Location of this page
+
+$('.social li').click(function(event){
+var shareName = $(this).attr('class').split(' ')[0]; //get the first class name of clicked element
+switch(shareName) //switch to different links based on different social name
+{
+case 'facebook':
+OpenShareUrl('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl) + '&amp;title=' + encodeURIComponent(pageTitle));
+break;
+case 'twitter':
+OpenShareUrl('http://twitter.com/home?status=' + encodeURIComponent(pageTitle + ' ' + pageUrl));
+break;
+case 'digg':
+OpenShareUrl('http://www.digg.com/submit?phase=2&amp;url=' + encodeURIComponent(pageUrl) + '&amp;title=' + encodeURIComponent(pageTitle));
+break;
+case 'stumbleupon':
+OpenShareUrl('http://www.stumbleupon.com/submit?url=' + encodeURIComponent(pageUrl) + '&amp;title=' + encodeURIComponent(pageTitle));
+break;
+case 'delicious':
+OpenShareUrl('http://del.icio.us/post?url=' + encodeURIComponent(pageUrl) + '&amp;title=' + encodeURIComponent(pageTitle));
+break;
+case 'gplus':
+OpenShareUrl('https://plus.google.com/share?url=' + encodeURIComponent(pageUrl) + '&amp;title=' + encodeURIComponent(pageTitle));
+break;
+case 'github':
+OpenShareUrl('https://github.com/amirodz');
+break;
+case 'email':
+OpenShareUrl('mailto:?subject=' + pageTitle + '&body=Found this useful link for you : ' + pageUrl);
+break;
+}
+		
+});
+		
+function OpenShareUrl(openLink){
+//Parameters for the Popup window
+winWidth    = 650; 
+winHeight   = 450;
+winLeft     = ($(window).width()  - winWidth)  / 2,
+winTop      = ($(window).height() - winHeight) / 2,
+winOptions   = 'width='  + winWidth  + ',height=' + winHeight + ',top='    + winTop    + ',left='   + winLeft;
+window.open(openLink,'Share This Link',winOptions); //open Popup window to share website.
+return false;
+}
+});
+</script>
+<script>
+
+window.addEventListener('load', () => {
+
+ navigator.geolocation.getCurrentPosition(success, error);
+
+	function success(pos) {
+		var lat = pos.coords.latitude;
+		var long = pos.coords.longitude;
+
+		console.log(lat);
+		console.log(long);
+		//openweathermap(lat, long);
+		weather(lat, long);
+	  };
+
+	function error() {
+		console.log('greska');
+	}; 
+
+
+	function weather(lat, long) {
+		var url = `https://fcc-weather-api.glitch.me/api/current?lat=${lat}&lon=${long}`;
+		$.getJSON(url, function(data) {
+		console.log(data);
+		updateDom(data);
+		});
+	}
+	
+		openweathermap('5', '6');
+
+	function updateDom(data) {
+		var city = data.name;
+		var temp = Math.round(data.main.temp);
+		var desc = data.weather[0].description;
+		var icon = data.weather[0].icon;
+		$('h2').html(city);
+		$('#num').html(temp);
+		$('#desc').html(desc);
+		$('img').attr('src', icon);
+		$('span').html('&#176;');
+	}
+	
+	function openweathermap(lat, long) {
+     /* 
+	 const api = 'a89c9110014143200265079416bbc50b'; 
+	 var url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${api}&units=metric&lang=ar`;
+	  */
+	  var url = `http://localhost/prayertimes2/weather.json`;
+
+    $.getJSON(url, function(data) {
+    console.log(data);
+    updateopenweathermap(data);
+      });
+    }
+
+	function updateopenweathermap(data) {
+	 var  imageMapper = {
+			"Clear": "sun.jpg",
+			"Clouds": "clouds.png",
+			"Drizzle": "drizzle.jpg",
+			"Smoke": "todo.png",
+            "Dust": "todo.png",
+            "Sand": "sand.jpg",
+            "Ash": "todo.png",
+            "Squall": "todo.png",
+            "Tornado": "tornado.jpg",
+			"Haze": "mist.jpg",
+			"Mist": "mist.jpg",
+			"Rain": "rain.jpg",
+			"Snow": "snow.png",
+			"Thunderstorm": "thunderstorm.jpg",
+            "Fog": "fog.jpg"
+		   }
+		var imageMapper = imageMapper[data.weather[0].main];
+		var city = data.name;
+		var temp = Math.round(data.main.temp);
+		var fahrenheit = (temp * 9) / 5 + 32;
+		var pressure = data.main.pressure;
+		var humidity = data.main.humidity;
+		var desc = data.weather[0].description;
+		var icon = data.weather[0].icon;
+		var iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+		var speed = data.wind.speed;
+		var temp = temp.toFixed(2);
+        var fahrenheit = fahrenheit.toFixed(2);
+		//sunrise, sunset } = data.sys
+		var sunriseGMT = new Date(data.sys.sunrise * 1000);
+        var sunsetGMT = new Date(data.sys.sunset * 1000);
+		$('#sunrise').html(`${sunriseGMT.toLocaleDateString()}, ${sunriseGMT.toLocaleTimeString()}`);
+        $('#sunset').html(`${sunsetGMT.toLocaleDateString()}, ${sunsetGMT.toLocaleTimeString()}`);
+		$('#location').html(city);
+		$('#c').html(temp+' °C');
+		$('#desc').html(desc);
+		$('#iconUrl').attr('src', iconUrl);
+		$('#humidity').html(humidity);
+		$('#pressure').html(pressure);
+		$('#windspeed').html(speed);
+		$('#f').html(fahrenheit+' °F');
+		//$('#Cle').html(imageMapper);
+		$('#Cle').attr('src', 'images/'+imageMapper);
+	   }
+  });
+</script>
+</body>
+</html>
