@@ -1,5 +1,5 @@
 # timeprayer
-# https://github.com/amirodz/timeprayer/
+# https://github.com/amirodz/prayer-times
 # times prayers
 # gps
 # adhan
