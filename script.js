@@ -115,7 +115,7 @@ var nameOfMonth = [
       'Sep',
       'Oct',
       'Nov',
-      'Des'
+      'Dec'
     ];
 //Sun Mon Tue Wed Thu Fri Sat
 var nameOfweekday = [
