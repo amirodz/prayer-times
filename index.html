@@ -253,74 +253,9 @@ body {
 </div>
 </div>
 
-<div class="container">	
-<div class="row">
-<div class="col-md-8">
-<div class="pr-5 pl-5 pt-5 pb-5 mt-5">
 
-<table class="table table-light table-hover table-bordered">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col"> حالة الطقس </th>
-      <th scope="col"><img src="" alt="" id="iconUrl"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">نسبة الرطوبة : </th>
-      <td class="font-weight-bold"><span id="humidity"></span> % </td>
-    </tr>
-    <tr>
-      <th scope="row">الضغط الجوي:</th>
-      <td class="font-weight-bold"><span id="pressure"></span> hpa</td>
-    </tr>
-	  <tr>
-      <th scope="row">حالة السماء:</th>
-      <td class="font-weight-bold"><span id="desc"></span></td>
-    </tr>
-	    <tr>
-      <th scope="row"></th>
-      <td><img src="" alt="" id="Cle"></td>
-    </tr>
-	    <tr>
-      <th scope="row">سرعة الرياح:</th>
-      <td class="font-weight-bold"><span id="windspeed"></span> متر في الثانية</td>
-    </tr>
-	    <tr>
-      <th scope="row">المدينة:</th>
-      <td class="font-weight-bold"><span id="location"></span></td>
-    </tr>
-   <tr>
-      <th scope="row">درجة الحرارة مئوية:</th>
-      <td class="font-weight-bold"><span id="c"></span></td>
-    </tr>
-	    <tr>
-      <th scope="row">درجة الحرارة فهرنهايت:</th>
-      <td class="font-weight-bold"><span id="f"></span></td>
-    </tr>    <tr>
-      <th scope="row">شروق الشمس:</th>
-      <td class="font-weight-bold"><span id="sunrise"></span></td>
-    </tr>    <tr>
-      <th scope="row">غروب الشمس:</th>
-      <td class="font-weight-bold"><span id="sunset"></span></td>
-    </tr>
-  </tbody>
-</table>
 
-</div>
-</div>
-</div>
-</div>
 
-<div id='container'>
-<h2></h2>
-<img />
-<div id='temp'>
-<h1 id='num'></h1>
-<span></span>
-</div>
-<p id='desc'></p>
-</div>
 		
 		
 <footer class="footer mt-5">
@@ -468,109 +403,15 @@ return false;
 }
 });
 </script>
-<script>
-
-window.addEventListener('load', () => {
-
- navigator.geolocation.getCurrentPosition(success, error);
-
-	function success(pos) {
-		var lat = pos.coords.latitude;
-		var long = pos.coords.longitude;
-
-		console.log(lat);
-		console.log(long);
-		//openweathermap(lat, long);
-		weather(lat, long);
-	  };
-
-	function error() {
-		console.log('greska');
-	}; 
 
 
-	function weather(lat, long) {
-		var url = `https://fcc-weather-api.glitch.me/api/current?lat=${lat}&lon=${long}`;
-		$.getJSON(url, function(data) {
-		console.log(data);
-		updateDom(data);
-		});
-	}
+
+
 	
-		openweathermap('5', '6');
-
-	function updateDom(data) {
-		var city = data.name;
-		var temp = Math.round(data.main.temp);
-		var desc = data.weather[0].description;
-		var icon = data.weather[0].icon;
-		$('h2').html(city);
-		$('#num').html(temp);
-		$('#desc').html(desc);
-		$('img').attr('src', icon);
-		$('span').html('&#176;');
-	}
 	
-	function openweathermap(lat, long) {
-     /* 
-	 const api = 'a89c9110014143200265079416bbc50b'; 
-	 var url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${api}&units=metric&lang=ar`;
-	  */
-	  var url = `http://localhost/prayertimes2/weather.json`;
+	
 
-    $.getJSON(url, function(data) {
-    console.log(data);
-    updateopenweathermap(data);
-      });
-    }
+	
 
-	function updateopenweathermap(data) {
-	 var  imageMapper = {
-			"Clear": "sun.jpg",
-			"Clouds": "clouds.png",
-			"Drizzle": "drizzle.jpg",
-			"Smoke": "todo.png",
-            "Dust": "todo.png",
-            "Sand": "sand.jpg",
-            "Ash": "todo.png",
-            "Squall": "todo.png",
-            "Tornado": "tornado.jpg",
-			"Haze": "mist.jpg",
-			"Mist": "mist.jpg",
-			"Rain": "rain.jpg",
-			"Snow": "snow.png",
-			"Thunderstorm": "thunderstorm.jpg",
-            "Fog": "fog.jpg"
-		   }
-		var imageMapper = imageMapper[data.weather[0].main];
-		var city = data.name;
-		var temp = Math.round(data.main.temp);
-		var fahrenheit = (temp * 9) / 5 + 32;
-		var pressure = data.main.pressure;
-		var humidity = data.main.humidity;
-		var desc = data.weather[0].description;
-		var icon = data.weather[0].icon;
-		var iconUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`;
-		var speed = data.wind.speed;
-		var temp = temp.toFixed(2);
-        var fahrenheit = fahrenheit.toFixed(2);
-		//sunrise, sunset } = data.sys
-		var sunriseGMT = new Date(data.sys.sunrise * 1000);
-        var sunsetGMT = new Date(data.sys.sunset * 1000);
-		$('#sunrise').html(`${sunriseGMT.toLocaleDateString()}, ${sunriseGMT.toLocaleTimeString()}`);
-        $('#sunset').html(`${sunsetGMT.toLocaleDateString()}, ${sunsetGMT.toLocaleTimeString()}`);
-		$('#location').html(city);
-		$('#c').html(temp+' °C');
-		$('#desc').html(desc);
-		$('#iconUrl').attr('src', iconUrl);
-		$('#humidity').html(humidity);
-		$('#pressure').html(pressure);
-		$('#windspeed').html(speed);
-		$('#f').html(fahrenheit+' °F');
-		//$('#Cle').html(imageMapper);
-		$('#Cle').attr('src', 'images/'+imageMapper);
-	   }
-  });
-</script>
 </body>
 </html>
